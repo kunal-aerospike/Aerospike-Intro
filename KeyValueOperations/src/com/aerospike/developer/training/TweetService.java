@@ -137,12 +137,18 @@ public class TweetService {
 			// Java Scan
 			// TODO: Create ScanPolicy instance with concurrentnodes, LOW priority and includeBinData 
 			// Exercise K4
-			console.printf("TODO: Create ScanPolicy instance.\n");			
+			ScanPolicy scanPolicy = new ScanPolicy();
+			scanPolicy.concurrentNodes = true;
+			scanPolicy.priority = Priority.LOW;
+			scanPolicy.includeBinData = true;
 			
 			// TODO: Initiate scan operation that invokes callback for outputting tweets on the console
 			// Exercise K4
-			console.printf("TODO: Initiate scan operation that invokes callback for outputting tweets on the console.\n");
-			//client.scanAll(....);
+			client.scanAll(scanPolicy, "test", "tweets", new ScanCallback() {
+				public void scanCallback(Key key, Record record) throws AerospikeException {
+					console.printf(record.getValue("tweet") + "\n");
+				}
+			}, "tweet");
 			
 		} catch (AerospikeException e) {
 			System.out.println("EXCEPTION - Message: " + e.getMessage());
