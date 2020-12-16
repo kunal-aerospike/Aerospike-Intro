@@ -53,6 +53,7 @@ public class UserService {
 	public void createUser() throws AerospikeException {
 		console.printf("\n********** Create User **********\n");
 
+
 	    ///*********************///
 	    ///*****Data Model*****///
 	    //Namespace: test
@@ -108,28 +109,26 @@ public class UserService {
             interests = console.readLine();
 
 			// Write record
-            // TODO: Create WritePolicy instance
             // Exercise K2
-            console.printf("TODO: Create WritePolicy instance.\n");
-			WritePolicy wPolicy = null;
+			WritePolicy writePolicy = new WritePolicy();
+			writePolicy.recordExistsAction = RecordExistsAction.UPDATE;
 
-			// TODO: Create Key and Bin instances for the user record.
+
 			// Remember to convert comma-separated interests into a list before storing it.
 		    // Exercise K2
-			console.printf("TODO: Create Key and Bin instances for the user record.\n");
-			//Key key = new Key(...
-			//Bin bin1 = new Bin("username", ....
-			//Bin bin2 = new Bin(...
-			//Bin bin3 = new Bin(...
-			//Bin bin4 = new Bin(...
-			//Bin bin5 = new Bin(...
-			//Bin bin6 = new Bin(...
-			//Bin bin7 = new Bin(...
+			Key key = new Key("test", "users", username);
+
+			Bin bin1 = new Bin("username", username);
+			Bin bin2 = new Bin("password", password);
+			Bin bin3 = new Bin("gemder", gender);
+			Bin bin4 = new Bin("region", region);
+			Bin bin5 = new Bin("lasttweeted", 0);
+			Bin bin6 = new Bin("tweetcount", 0);
+			Bin bin7 = new Bin("interests", Arrays.asList(interests.split(",")));
 
 			// TODO: Write user record
 		    // Exercise K2
-			console.printf("TODO: Write user record.\n");
-			//client.put(....
+			client.put(writePolicy, key, bin1, bin2, bin3, bin4, bin5, bin6, bin7);
 
 			console.printf("\nINFO: User record created!");
 		}

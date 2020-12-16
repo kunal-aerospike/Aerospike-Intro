@@ -168,7 +168,7 @@ public class Program {
 		} finally {
 			// TODO: Close Aerospike cluster connection
 			// Exercise K1
-			console.printf("TODO: Close Aerospike cluster connection.\n");
+			//console.printf("TODO: Close Aerospike cluster connection.\n");
 			//console.printf("\n\nINFO: Press any key to exit...\n");
 			console.readLine();
 		}

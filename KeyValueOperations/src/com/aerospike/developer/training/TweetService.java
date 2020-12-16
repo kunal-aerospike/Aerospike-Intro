@@ -82,9 +82,10 @@ public class TweetService {
 
 		if (username != null && username.length() > 0) {
 			// TODO: Check if userRecord exists
-			// Exercise K2			
+			// Exercise K2
 			
-			console.printf("TODO: Check if userRecord exists.\n");
+			userKey = new Key("test", "users", username);
+			userRecord = client.get(null, userKey);
 			
 			if (userRecord != null) {
 				int nextTweetCount = Integer.parseInt(userRecord.getValue(
@@ -102,27 +103,22 @@ public class TweetService {
 				// TODO: Create WritePolicy instance
 			    // Exercise K2
 				
-				console.printf("TODO: Create WritePolicy instance.\n");
-				WritePolicy wPolicy = null;
+				WritePolicy wPolicy = new WritePolicy();
+				wPolicy.recordExistsAction = RecordExistsAction.UPDATE;
 				
-				// TODO: Create Key and Bin instances for the tweet record. 
+				// TODO: Create Key and Bin instances for the tweet record.
 				// HINT: tweet key should be in username:nextTweetCount format
 			    // Exercise K2
 				
-				console.printf("TODO: Create Key for the tweet record.\n");
-				//tweetKey = ....
-				
-				console.printf("TODO: Create Bin instances for the tweet record.\n");
-				Bin bin1 = null;
-				Bin bin2 = null;
-				Bin bin3 = null;
-				
-				// TODO: Write tweet record
-			    // Exercise K2
-				
-				console.printf("TODO: Write tweet record.\n");
 
-				//client.put(.....);
+				tweetKey = new Key("test", "tweets", username + ":" + nextTweetCount);
+				
+				Bin bin1 = new Bin("tweet", tweet);
+				Bin bin2 = new Bin("ts", ts);
+				Bin bin3 = new Bin("username", username);
+				
+			    // Exercise K2
+				client.put(wPolicy, tweetKey, bin1, bin2, bin3);
 				
 				console.printf("\nINFO: Tweet record created!\n");
 
@@ -160,8 +156,9 @@ public class TweetService {
 		
 		// TODO: Update tweet count and last tweeted timestamp in the user record
 	    // Exercise K2
-		console.printf("TODO: Update tweet count and last tweeted timestamp in the user record");
-        //client.put(....
+		Bin bin1 = new Bin("ts", ts);
+		Bin bin2 = new Bin("tweetCount", tweetCount);
+        client.put(policy, userKey, bin1, bin2);
 		
         console.printf("\nINFO: The tweet count now is: " + tweetCount);
 
