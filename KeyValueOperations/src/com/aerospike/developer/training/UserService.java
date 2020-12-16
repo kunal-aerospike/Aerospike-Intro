@@ -120,7 +120,7 @@ public class UserService {
 
 			Bin bin1 = new Bin("username", username);
 			Bin bin2 = new Bin("password", password);
-			Bin bin3 = new Bin("gemder", gender);
+			Bin bin3 = new Bin("gender", gender);
 			Bin bin4 = new Bin("region", region);
 			Bin bin5 = new Bin("lasttweeted", 0);
 			Bin bin6 = new Bin("tweetcount", 0);
@@ -146,7 +146,8 @@ public class UserService {
 		if (username != null && username.length() > 0) {
 			// TODO: Read user record
 		    // Exercise K2
-			console.printf("TODO: Read user record.\n");
+			Key key = new Key("test", "users", username);
+			userRecord = client.get(null, key);
 
 			// Check if userRecord exists
 			if (userRecord != null) {
@@ -154,13 +155,12 @@ public class UserService {
 				// TODO: Output user record to the console.
 				// Remember to convert list into comma-separated interests before outputting it.
 			    // Exercise K2
-				console.printf("TODO: Print user record.\n");
-				//console.printf("username:   " + ....
-				//console.printf("password:   " + ....
-				//console.printf("gender:     " + ....
-				//console.printf("region:     " + ....
-				//console.printf("tweetcount: " + ....
-				//console.printf("interests:  " + ....
+				console.printf("username:   " + userRecord.getValue("username"));
+				console.printf("\npassword:   " + userRecord.getValue("password"));
+				console.printf("\ngender:     " + userRecord.getValue("gender"));
+				console.printf("\nregion:     " + userRecord.getValue("region"));
+				console.printf("\ntweetcount: " + userRecord.getValue("tweetCount"));
+				console.printf("\ninterests:  " + userRecord.getValue("interests"));
 			} else {
 				console.printf("ERROR: User record not found!\n");
 			}
@@ -295,21 +295,24 @@ public class UserService {
 		if (username != null && username.length() > 0) {
 			// TODO: Read user record
 			// Exercise K3
-			console.printf("TODO: Read user record.\n");
+			userKey = new Key("test", "users", username);
+			userRecord = client.get(null, userKey);
 
 
 			// Check if userRecord exists
 			if (userRecord != null) {
 				// TODO: Get how many tweets the user has
 				// Exercise K3
-				int tweetCount = 0;
-				console.printf("TODO: Get how many tweets the user has.\n");
+				int tweetCount = ((Long) userRecord.getValue("tweetCount")).intValue();
+				console.printf(String.valueOf(tweetCount));
 
 				// TODO: Create an array of tweet keys -- keys[tweetCount]
 				// Exercise K3
 
 				Key[] keys = new Key[tweetCount];
-				console.printf("TODO: Create an array of tweet keys -- keys[tweetCount].\n");
+				for(int i=0;i<tweetCount;i++) {
+					keys[i]=new Key("test", "tweets", username + ":" + String.valueOf(i+1));
+				}
 
 
 				console.printf("\nHere's " + username + "'s tweet(s):\n");
@@ -319,13 +322,15 @@ public class UserService {
 				// Null returned for records not found. (We should not have any)
 				// We expect upto max 20 tweets.
 				// Exercise K3
-				console.printf("TODO: Initiate batch read operation.\n");
+				//console.printf("TODO: Initiate batch read operation.\n");
 				if (keys.length > 0){
-					//Record[] records = ....
+					Record[] records = client.get(new BatchPolicy(), keys);
 
 					// TODO: Output tweets to the console
 					// Exercise K3
-					console.printf("TODO: Output tweets to the console.\n");
+					for(int i=0;i<records.length;i++) {
+						console.printf(records[i].getValue("tweet") + "\n");
+					}
 
 				}
 			}

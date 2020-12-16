@@ -89,7 +89,7 @@ public class TweetService {
 			
 			if (userRecord != null) {
 				int nextTweetCount = Integer.parseInt(userRecord.getValue(
-						"tweetcount").toString()) + 1;
+						"tweetCount").toString()) + 1;
 
 				// Get tweet
 				String tweet;
