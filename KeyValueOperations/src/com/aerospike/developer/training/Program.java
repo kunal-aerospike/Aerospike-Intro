@@ -172,6 +172,9 @@ public class Program {
 			//console.printf("\n\nINFO: Press any key to exit...\n");
 			console.readLine();
 		}
+		if(client==null || !client.isConnected()) {
+			client.close();
+		}
 	}
 
 	/*
