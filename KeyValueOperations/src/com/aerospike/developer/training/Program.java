@@ -40,17 +40,14 @@ public class Program {
 
 	public Program()
 			throws AerospikeException {
-		// TODO: Establish a connection to Aerospike cluster
-		// Exercise K1				
-		//Replace "127.0.0.1" with your AWS instance IP address
-		
-		//this.client = ....
-		console.printf("TODO: Establish a connection to Aerospike cluster.\n");
-		
-		// Note: Scroll down and also see the functions 
+
+		// Exercise K1
+		client = new AerospikeClient("127.0.0.1", 3000);
+
+		// Note: Scroll down and also see the functions
 		// multipleSeedNodes() and connectWithClientPolicy()
 		// for other implementations for establishing a connection.
-		
+
 		//this.writePolicy = new WritePolicy();
 		this.policy = new Policy();
 	}
@@ -72,14 +69,14 @@ public class Program {
 		try {
 			console.printf("INFO: Connecting to Aerospike cluster...");
 
+
+
 			// TODO: Check to see if the cluster connection succeeded
-		    // Exercise K1  
-			console.printf("TODO: Check to see if the cluster connection succeeded.\n");
-			//Replace false with appropriate code
-			if (false) {  				
-				console.printf("\nERROR: Connection to Aerospike cluster failed! Please check the server settings and try again!");				
+			// Exercise K1
+			if(client==null || !client.isConnected()) {
+				console.printf("\nERROR: Connection to Aerospike cluster failed! Please check the server settings and try again!");
 			} else {
-				console.printf("\nINFO: Connection to Aerospike cluster succeeded!\n");
+				console.printf("\nINFO: SUCCESS Connection to Aerospike cluster succeeded!\n");
 
 				// Create instance of UserService
 				UserService us = new UserService(client);
