@@ -258,18 +258,16 @@ public class UserService {
 
 				// TODO: Update User record with new password only if generation is the same
 				// Exercise K5
-				console.printf("TODO: Create WritePolicy instance./n");
+				WritePolicy writePolicy = new WritePolicy();
+				writePolicy.generation = userRecord.generation;
+				writePolicy.generationPolicy = GenerationPolicy.EXPECT_GEN_EQUAL;
 
-				// record generation
-				console.printf("TODO: Set generation policy and value./n");
+				Bin bin = new Bin("password", password);
 
-				// password Bin
-				console.printf("TODO: Create password bin./n");
-
-				console.printf("TODO: Write the record./n");
+				client.put(writePolicy, userKey, bin);
 
                 //Update (xNOT) message below
-				console.printf("\nINFO: The password has NOT been set to: " + password);
+				//console.printf("\nINFO: The password has NOT been set to: " + password);
 			}
 			else
 			{
