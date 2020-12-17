@@ -159,7 +159,7 @@ public class UserService {
 				console.printf("\npassword:   " + userRecord.getValue("password"));
 				console.printf("\ngender:     " + userRecord.getValue("gender"));
 				console.printf("\nregion:     " + userRecord.getValue("region"));
-				console.printf("\ntweetcount: " + userRecord.getValue("tweetCount"));
+				console.printf("\ntweetcount: " + userRecord.getValue("tweetcount"));
 				console.printf("\ninterests:  " + userRecord.getValue("interests"));
 			} else {
 				console.printf("ERROR: User record not found!\n");
@@ -301,7 +301,7 @@ public class UserService {
 			if (userRecord != null) {
 				// TODO: Get how many tweets the user has
 				// Exercise K3
-				int tweetCount = ((Long) userRecord.getValue("tweetCount")).intValue();
+				int tweetCount = ((Long) userRecord.getValue("tweetcount")).intValue();
 				console.printf(String.valueOf(tweetCount));
 
 				// TODO: Create an array of tweet keys -- keys[tweetCount]

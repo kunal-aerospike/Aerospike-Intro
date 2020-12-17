@@ -89,7 +89,7 @@ public class TweetService {
 			
 			if (userRecord != null) {
 				int nextTweetCount = Integer.parseInt(userRecord.getValue(
-						"tweetCount").toString()) + 1;
+						"tweetcount").toString()) + 1;
 
 				// Get tweet
 				String tweet;
@@ -162,32 +162,32 @@ public class TweetService {
 		
 		// TODO: Update tweet count and last tweeted timestamp in the user record
 	    // Exercise K2
-		Bin bin1 = new Bin("ts", ts);
+		/*Bin bin1 = new Bin("ts", ts);
 		Bin bin2 = new Bin("tweetCount", tweetCount);
         client.put(policy, userKey, bin1, bin2);
 		
-        console.printf("\nINFO: The tweet count now is: " + tweetCount);
+        console.printf("\nINFO: The tweet count now is: " + tweetCount);*/
 
         
         //Exercise K6
         //Comment above code and uncomment call to updateUserUsingOperate()
         //Add code in updateUserUsingOperate()
-        // updateUserUsingOperate(client, userKey, policy, ts);
+        updateUserUsingOperate(client, userKey, policy, ts);
 	} //updateUser
 
 	private void updateUserUsingOperate(AerospikeClient client, Key userKey,
 			WritePolicy policy, long ts) throws AerospikeException {
-		
+
 		// TODO: Initiate operate passing in policy, user record key, 
 		// .add operation incrementing tweet count, .put operation updating timestamp 
 		// and .get operation to read the user record		
 	    // Exercise K6
-		console.printf("TODO: Initiate operate.\n");;
+		Record record = client.operate(policy, userKey, Operation.add(new Bin("tweetcount", 1)),
+				Operation.put(new Bin("lasttweeted", ts)), Operation.get());
 				
 		// TODO: Output most recent tweet count     
 	    // Exercise K6
-		console.printf("TODO: Output most recent tweet count.\n");
-		console.printf("\nINFO: The tweet count now is: " + "...");
+		console.printf("\nINFO: The tweet count now is: " + record.getValue("tweetcount"));
 	} //updateUserUsingOperate
 
 	public void queryTweetsByUsername() throws AerospikeException {		
