@@ -185,6 +185,8 @@ public class UserService {
             // TODO: Read user record and check if userRecord exists
             // Exercise R2
         	console.printf("TODO: Read user record and check if userRecord exists.\n");
+        	userKey = new Key("test", "users", username);
+        	userRecord = client.get(null, userKey);
             
             if (userRecord != null)
             {
@@ -200,20 +202,18 @@ public class UserService {
                 // or standalone application routines using code similar to below.
                 LuaConfig.SourceDirectory = "udf";
     			File udfFile = new File("udf/updateUserPwd.lua");
-    			
-    			console.printf("TODO: Register UDF.\n");
 
-    			//RegisterTask rt = ....
-    			//rt.waitTillComplete(100);
+				RegisterTask task = client.register(null, udfFile.getPath(), udfFile.getName(), Language.LUA);
+				// Poll cluster for completion every second for a maximum of 10 seconds.
+				task.waitTillComplete(1000);;
 
                 // TODO: Execute UDF
                 // Exercise R2
-    			console.printf("TODO: Execute UDF, return value is updated Password.\n");
-    			//String updatedPassword = .....
+				String updatedPassword = (String) client.execute(null, userKey, "updateUserPwd", "updatePassword", Value.get(password));
     			
                 // TODO: Output updated password to the console
                 // Exercise R2
-                console.printf("TODO: Output updated password to the console. \n");                
+                console.printf("updatedPassword: " + updatedPassword);
             }
             else
             {
