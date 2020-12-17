@@ -333,7 +333,7 @@ public class UserService {
 		// NOTE: Index creation has been included in here for convenience and to demonstrate the syntax. 
 		// The recommended way of creating indexes in production env is via AQL
 		// or create once using standalone application code.
-		console.printf("TODO: Create NUMERIC index on tweetcount in users set.\n");
+		//console.printf("TODO: Create NUMERIC index on tweetcount in users set.\n");
 		
 		//IndexTask task = ...
 		//task.waitTillComplete(100);
@@ -354,51 +354,48 @@ public class UserService {
             // or standalone application routines using code similar to below.
             LuaConfig.SourceDirectory = "udf";
 			File udfFile = new File("udf/aggregationByRegion.lua");
-			console.printf("TODO: Register UDF.\n");
-
-			//RegisterTask rt = .....
-			//rt.waitTillComplete(100);
+			RegisterTask rt = client.register(null, udfFile.getPath(),
+					udfFile.getName(), Language.LUA);
+			rt.waitTillComplete(100);
 
 			// TODO: Create String array of bins you would like to retrieve. 
 			// In this example, we want to output which region has how many tweets. 
 			// Exercise A2
-			console.printf("TODO: Create String array of bins you would like to retrieve.\n");
-			//String[] bins = ....
+
+			String[] bins = {"region", "tweetcount"};
 			
 			// TODO: Create Statement instance
 			// Exercise A2
-			console.printf("TODO: Create Statement instance.\n");
+			Statement stmt = new Statement();
 			
 			
 			// TODO: Set namespace on the instance of Statement
 		    // Exercise A2
-			console.printf("TODO: Set namespace on the instance of Statement.\n");
+			stmt.setNamespace("test");
 			
 			
 			// TODO: Set name of the set on the instance of Statement
 		    // Exercise A2
-			console.printf("TODO: Set name of the set on the instance of Statement.\n");
-			
+			stmt.setSetName("users");
 			
 			// TODO: Set name of the index on the instance of Statement
 		    // Exercise A2
-			console.printf("TODO: Set name of the index on the instance of Statement.\n");
-			
+			stmt.setIndexName("tweetcount_index");
 			
 			// TODO: Set list of bins you want retrieved on the instance of Statement
 		    // Exercise A2
-			console.printf("TODO: Set list of bins you want retrieved on the instance of Statement.\n");
+			stmt.setBinNames(bins);
 			
 			
 			// TODO: Set min--max range Filter on tweetcount on the instance of Statement
 		    // Exercise A2
-			console.printf("TODO: Set min--max range Filter on tweetcount on the instance of Statement.\n");
+			stmt.setFilter(Filter.range("tweetcount", min, max));
 			
 
 			// TODO: Execute Aggregation query passing in <null> policy and instance of Statement,
 			// Lua module and module function to call.
 		    // Exercise A2
-			console.printf("TODO: Execute Aggregation query passing in <null> policy and instance of Statement.\n");
+			rs = client.queryAggregate(null, stmt, "aggregationByRegion", "sum");
 			
 
 			console.printf("\nAggregating users with " + min + "-"
@@ -407,12 +404,14 @@ public class UserService {
 			// TODO: Iterate through returned RecordSet and for each record, 
 			// output text in format "Total Users in <region>: <#>"
 		    // Exercise A2
-			console.printf("TODO: Iterate through returned RecordSet and for each record output text in format <username> has <#> tweets.\n");
+
 			if (rs.next()) {
 				//@SuppressWarnings("unchecked")
-				//Map<Object, Object> result = (Map<Object, Object>) rs
-				//		.getObject();
-				//console.printf("\nTotal Users in North: " + ....			
+				Map<Object, Object> result = (Map<Object, Object>) rs.getObject();
+				console.printf("\nTotal Users in North: " + result.get("n"));
+				console.printf("\nTotal Users in South: " + result.get("s"));
+				console.printf("\nTotal Users in East: " + result.get("e"));
+				console.printf("\nTotal Users in West: " + result.get("w"));
 			}
 		} finally {
 			// TODO: Close record set 
