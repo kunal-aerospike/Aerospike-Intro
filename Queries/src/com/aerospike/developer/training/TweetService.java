@@ -197,7 +197,7 @@ public class TweetService {
 	    // The recommended way of creating indexes in production env is via AQL
 		// or create once using standalone application code.
 
-		console.printf("TODO: Create STRING index on username in tweets set.\n");
+		//console.printf("TODO: Create STRING index on username in tweets set.\n");
     // Do Index creation within try-catch. If index already exists, indexCreate() will error out.
 		//try {
     //  IndexTask task = .....
@@ -206,7 +206,6 @@ public class TweetService {
     // System.out.printf(e.toString());
     // }
 
-		RecordSet rs = null;
 		try {
 			// Get username
 			String username;
@@ -217,46 +216,45 @@ public class TweetService {
 				// TODO: Create String array of bins you would like to retrieve.
 				// In this example, we want to display all tweets for a given user.
 				// Exercise Q3
-				console.printf("TODO: Create String array of bins you would like to retrieve.\n");
-				//String[] bins = .....
+				//console.printf("TODO: Create String array of bins you would like to retrieve.\n");
+				String[] bins = new String[1];
+				bins[0]="tweet";
 
 				// TODO: Create Statement instance
 				// Exercise Q3
-				console.printf("TODO: Create Statement instance.\n");
+				Statement stmt = new Statement();
+
 
 				// TODO: Set namespace on the instance of Statement
 				// Exercise Q3
-				console.printf("TODO: Set namespace on the instance of Statement.\n");
+				stmt.setNamespace("test");
 
 				// TODO: Set name of the set on the instance of Statement
 				// Exercise Q3
-				console.printf("TODO: Set name of the set on the instance of Statement.\n");
+				stmt.setSetName("users");
 
 				// TODO: Set name of the index on the instance of Statement
 			    // Exercise Q3
-				console.printf("TODO: Set name of the index on the instance of Statement.\n");
-
+				stmt.setIndexName("username_index");
 
 				// TODO: Set list of bins you want retrieved on the instance of Statement
 				// Exercise Q3
-				console.printf("TODO: Set list of bins you want retrieved on the instance of Statement.\n");
+				stmt.setBinNames(bins);
 
 				// TODO: Set equality Filter on username on the instance of Statement
 			    // Exercise Q3
-				console.printf("TODO: Set equality Filter on username on the instance of Statement.\n");
+				stmt.setFilter(Filter.equal("username", username));
 
 				// TODO: Execute query passing in <null> policy and instance of Statement
 				// Exercise Q3
-				console.printf("TODO: Execute query passing in <null> policy and instance of Statement.\n");
-
+				RecordSet rs = client.query(null, stmt);
 
 				console.printf("\nHere's " + username + "'s tweet(s):\n");
-				console.printf("TODO: Iterate through returned RecordSet and output tweets to the console.\n");
 				while (rs.next()) {
 					Record r = rs.getRecord();
 					// TODO: Iterate through returned RecordSet and output tweets to the console
 					// Exercise Q3
-					// console.printf(.....
+					console.printf(r.getValue("tweet").toString()+ "\n");
 				}
 			} else {
 				console.printf("ERROR: User record not found!\n");
@@ -277,7 +275,7 @@ public class TweetService {
 		// The recommended way of creating indexes in production env is via AQL
 		// or create once using standalone application code.
 
-		console.printf("TODO: Create NUMERIC index on tweetcount in users set.\n");
+		//console.printf("TODO: Create NUMERIC index on tweetcount in users set.\n");
 
     // Do Index creation within try-catch. If index already exists, indexCreate() will error out.
 		//try {
@@ -300,53 +298,48 @@ public class TweetService {
             // TODO: Create String array of bins you would like to retrieve.
 			// In this example, we want to output which user has how many tweets.
             // Exercise Q4
-			console.printf("TODO: Create String array of bins you would like to retrieve..\n");
-			//String[] bins = .....
+			String[] bins = {"username"};
 
 			// TODO: Create Statement instance
 			// Exercise Q4
-			console.printf("TODO: Create Statement instance.\n");
-
+			Statement stmt = new Statement();
 
 			// TODO: Set namespace on the instance of Statement
 		    // Exercise Q4
-			console.printf("TODO: Set namespace on the instance of Statement.\n");
-
+			stmt.setNamespace("test");
 
 			// TODO: Set name of the set on the instance of Statement
 		    // Exercise Q4
-			console.printf("TODO: Set name of the set on the instance of Statement.\n");
-
+			stmt.setSetName("users");
 
 			// TODO: Set name of the index on the instance of Statement
 		    // Exercise Q4
-			console.printf("TODO: Set name of the index on the instance of Statement.\n");
-
+			stmt.setIndexName("tweetcount_index");
 
 			// TODO: Set list of bins you want retrieved on the instance of Statement
 		    // Exercise Q4
-			console.printf("TODO: Set list of bins you want retrieved on the instance of Statement.\n");
+			stmt.setBinNames(bins);
 
 
 			// TODO: Set min--max range Filter on tweetcount on the instance of Statement
 		    // Exercise Q4
-			console.printf("TODO: Set min--max range Filter on tweetcount on the instance of Statement.\n");
+			stmt.setFilter(Filter.range("tweetcount", min, max));
 
 
 			// TODO: Execute query passing in <null> policy and instance of Statement
 		    // Exercise Q4
-			console.printf("TODO: Execute query passing in <null> policy and instance of Statement.\n");
+			rs = client.query(null, stmt);
 
 
 			console.printf("\nList of users with " + min + "-" + max
 					+ " tweets:\n");
 
-			console.printf("TODO: Iterate through returned RecordSet and for each record, output text in format <username> has <#> tweets.\n");
+
 			while (rs.next()) {
 				Record r = rs.getRecord();
 				// TODO: Iterate through returned RecordSet and for each record, output text in format "<username> has <#> tweets"
 			    // Exercise Q4
-				//console.printf(....
+				console.printf(r.getValue("username").toString());
 				}
 			} finally {
 				// TODO: Close record set
